@@ -8,7 +8,7 @@ import views.*;
 import models.*;
 
 public abstract class Controller {
-	
+
 	protected Display display = Display.getDefault();
 	protected ArrayList<Post> posts = new ArrayList<Post>();
 	protected Paginator paginator;
@@ -17,43 +17,39 @@ public abstract class Controller {
 	protected SearchEngine search;
 	protected XMLWriter xmlWriter;
 	protected XMLParser xmlParser;
-	
-	protected EventHelper getEvents()
-	{
+
+	protected EventHelper getEvents() {
 		return new EventHelper(this);
 	}
-	
-	public Controller()
-	{
+
+	public Controller() {
 		paginator = new Paginator(6, posts, this);
 		search = new SearchEngine();
 	}
-	
-	public void index() 
-	{
+
+	public void index() {
 		ArrayList<Post> postsOnPage = paginator.getByPage(0);
-		activeView.create(postsOnPage, paginator);	
+		activeView.create(postsOnPage, paginator);
 	}
-	
-	public void goToPage(int page)
-	{
+
+	public void goToPage(int page) {
 		render(page);
 	}
-	
+
 	public abstract void render(int page);
-	
+
 	public abstract void openSearch();
-	
-	public abstract void search( SubmitFormData data );
-	
-	public abstract void saveInFile();	
-	
-	public abstract void parse(String selected );
-	
+
+	public abstract void search(SubmitFormData data);
+
+	public abstract void saveInFile();
+
+	public abstract void parse(String selected);
+
 	public abstract void submitForm(SubmitFormData sfd);
-	
+
 	public abstract void openRemover();
-	
+
 	public abstract void setPosts(ArrayList<Post> posts2);
-		
+
 }

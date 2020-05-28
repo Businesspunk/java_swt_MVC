@@ -3,51 +3,43 @@ package helper;
 import controllers.*;
 
 public class SubmitFormData {
-	
-	protected Controller controller;
-	protected String[] textData;
-	protected int[] intData;
-	protected boolean[] boolData;
-	
-	public SubmitFormData( Controller controllerL )
-	{
+
+	private Controller controller;
+	private String[] textData;
+	private int[] intData;
+	private boolean[] boolData;
+
+	public SubmitFormData(Controller controllerL) {
 		controller = controllerL;
 	}
-	
-	public void setData( String[] textDataL, int[] intDataL )
-	{
+
+	public void setData(String[] textDataL, int[] intDataL) {
 		textData = textDataL;
 		intData = intDataL;
 	}
-	
-	public void setData(String[] textDataL, int[] intDataL, boolean[] boolData ) 
-	{
-		setData( textDataL, intDataL );
+
+	public void setData(String[] textDataL, int[] intDataL, boolean[] boolData) {
+		setData(textDataL, intDataL);
 		this.boolData = boolData;
 	}
-	
-	public void sendData() 
-	{
-		controller.submitForm( this );
+
+	public void sendData() {
+		controller.submitForm(this);
 	}
-	
-	public void searchData()
-	{
+
+	public void searchData() {
 		controller.search(this);
 	}
-	
-	public String[] getTextData()
-	{
+
+	public String[] getTextData() {
 		return textData;
 	}
-	
-	public int[] getIntData()
-	{
+
+	public int[] getIntData() {
 		return intData;
 	}
-	
-	public boolean[] getBoolData()
-	{
+
+	public boolean[] getBoolData() {
 		return boolData;
 	}
 

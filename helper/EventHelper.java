@@ -6,42 +6,36 @@ import controllers.*;
 import models.Post;
 
 public class EventHelper {
-	
-	protected Controller activeController;
-	protected SubmitFormData formData;
-	
-	public EventHelper( Controller activeController ) {
+
+	private Controller activeController;
+	private SubmitFormData formData;
+
+	public EventHelper(Controller activeController) {
 		this.activeController = activeController;
 		formData = new SubmitFormData(activeController);
 	}
-	
-	public void openSearchEvent()
-	{
+
+	public void openSearchEvent() {
 		activeController.openSearch();
 	}
-	
-	public void openRemoveEvent()
-	{
+
+	public void openRemoveEvent() {
 		activeController.openRemover();
 	}
-	
-	public SubmitFormData getSubmitFormData()
-	{
+
+	public SubmitFormData getSubmitFormData() {
 		return formData;
 	}
-	
-	
-	public void parse(String selected )
-	{
+
+	public void parse(String selected) {
 		activeController.parse(selected);
 	}
-	
-	public void savePostsInFile()
-	{
+
+	public void savePostsInFile() {
 		activeController.saveInFile();
 	}
-	
-	public void setPostsForIndexView( ArrayList<Post> posts ) {
+
+	public void setPostsForIndexView(ArrayList<Post> posts) {
 		activeController.setPosts(posts);
 	}
 

@@ -9,172 +9,158 @@ import controllers.Controller;
 import models.Post;
 
 public class Paginator {
-	
+
 	protected ArrayList<Post> posts;
 	protected int pagination;
 	protected int currentPage = 0;
 	protected Controller activeController;
 
-
-	public Paginator( int paginationL, ArrayList<Post> postsL, Controller activeControllerL )
-	{
-		setPosts( postsL );
+	public Paginator(int paginationL, ArrayList<Post> postsL, Controller activeControllerL) {
+		setPosts(postsL);
 		pagination = paginationL;
 		activeController = activeControllerL;
 	}
-	
-	public void setPosts( ArrayList<Post> postsL )
-	{
+
+	public void setPosts(ArrayList<Post> postsL) {
 		posts = postsL;
 	}
-	
-	public void updatePosts( ArrayList<Post> postsL ) {
+
+	public void updatePosts(ArrayList<Post> postsL) {
 		posts = postsL;
 	}
-	
-	public boolean isAvaible()
-	{
+
+	public boolean isAvaible() {
 		return getNumOfPages() >= 2;
 	}
-	
-	protected Listener getListener( int page ) {
+
+	protected Listener getListener(int page) {
 		Paginator active = this;
-		
+
 		Listener listener = new Listener() {
 			public void handleEvent(Event e) {
-				active.goToPageLayer( page ); 		  		
+				active.goToPageLayer(page);
 			}
 		};
-			
+
 		return listener;
 	}
-	
-	public void create( Shell shell  )
-	{
+
+	public void create(Shell shell) {
 		int numOfPages = getNumOfPages();
 		ButtonHelper bh = new ButtonHelper(shell);
 		LabelHelper lh = new LabelHelper(shell);
-		
+
 		bh.createSpacer();
-		
-		Button button = bh.create( "Назад" );
-		if( currentPage == 0 ) {
+
+		Button button = bh.create("Назад");
+		if (currentPage == 0) {
 			button.setEnabled(false);
-		}else {
-			button.addListener(SWT.Selection, getListener(currentPage-1));
+		} else {
+			button.addListener(SWT.Selection, getListener(currentPage - 1));
 		}
-		
-		button = bh.create( "Вперед" );
-		if( currentPage == numOfPages - 1 ) {
+
+		button = bh.create("Вперед");
+		if (currentPage == numOfPages - 1) {
 			button.setEnabled(false);
-		}else {
-			button.addListener(SWT.Selection, getListener(currentPage+1));
+		} else {
+			button.addListener(SWT.Selection, getListener(currentPage + 1));
 		}
-		
+
 		bh.createSpacer();
-		
-		for( int i = 0; i < numOfPages; i++ ) {
-			
-		    button = bh.create(i+1);
-			
-			if( currentPage == i ) {
+
+		for (int i = 0; i < numOfPages; i++) {
+
+			button = bh.create(i + 1);
+
+			if (currentPage == i) {
 				button.setEnabled(false);
-			}else {
+			} else {
 				button.addListener(SWT.Selection, getListener(i));
 			}
 		}
-		
+
 		printPostsCount(shell);
 		bh.createSpacer();
-		lh.create( "На странице: " + (currentPage + 1) + " из " + getNumOfPages());
+		lh.create("На странице: " + (currentPage + 1) + " из " + getNumOfPages());
 	}
-	
-	public void printPostsCount( Shell shell )
-	{
+
+	public void printPostsCount(Shell shell) {
 		ButtonHelper bh = new ButtonHelper(shell);
 		TextHelper tx = new TextHelper(shell);
 		LabelHelper lh = new LabelHelper(shell);
-		
+
 		lh.createSpacer();
-		lh.create( "Записей на странице" );
-		
+		lh.create("Записей на странице");
+
 		lh.createSpacer();
 		Text pages = tx.create();
-		pages.setText( Integer.toString(pagination) );
+		pages.setText(Integer.toString(pagination));
 		Button button = bh.create("Обновить");
-		
+
 		button.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				int newPages = Integer.parseInt( pages.getText() );
+				int newPages = Integer.parseInt(pages.getText());
 				pagination = newPages;
 				activeController.render(0);
 			}
 		});
-		
+
 		lh.createSpacer();
-		lh.create( "Записей всего: " + posts.size() );
+		lh.create("Записей всего: " + posts.size());
 	}
-	
-	public int getCurrentPostsOnPage()
-	{
-		if( pagination > posts.size() ) {
+
+	public int getCurrentPostsOnPage() {
+		if (pagination > posts.size()) {
 			return posts.size();
-		}else {
+		} else {
 			return pagination;
 		}
 	}
-	
-	
-	public ArrayList<Post> getByPage( int page )
-	{	
+
+	public ArrayList<Post> getByPage(int page) {
 		currentPage = page;
-		
+
 		int endLength, startLength;
-		
-		if( posts.size() < (page + 1)*pagination )
-		{
+
+		if (posts.size() < (page + 1) * pagination) {
 			endLength = posts.size();
-		}else {
-			endLength = (page + 1)*pagination;
+		} else {
+			endLength = (page + 1) * pagination;
 		}
-		
-		startLength = page* pagination;
-		
-		if(startLength + 1 > posts.size()) {
+
+		startLength = page * pagination;
+
+		if (startLength + 1 > posts.size()) {
 			return new ArrayList<Post>();
 		}
-		
+
 		ArrayList<Post> onPage = new ArrayList<Post>(endLength - startLength);
-		
-		for( int i = startLength, j = 0; i < endLength; i++, j++ ) {
-			onPage.add( posts.get(i) );
+
+		for (int i = startLength; i < endLength; i++) {
+			onPage.add(posts.get(i));
 		}
-		
+
 		return onPage;
 	}
-	
-	
-	public int getNumOfPages()
-	{
-		double ceil = (double) posts.size()/pagination;
+
+	public int getNumOfPages() {
+		double ceil = (double) posts.size() / pagination;
 		int all = (int) ceil;
-		
-		if(ceil - all == 0) {
+
+		if (ceil - all == 0) {
 			return all;
-		}else {
+		} else {
 			return all + 1;
 		}
 	}
-	
-	public void goToPageLayer(int page)
-	{
+
+	public void goToPageLayer(int page) {
 		currentPage = page;
 		activeController.goToPage(page);
 	}
-	
-	public int getCurrentPage()
-	{
+
+	public int getCurrentPage() {
 		return currentPage;
 	}
-	
+
 }
